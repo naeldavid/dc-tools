@@ -215,7 +215,7 @@ async function joinVC(botClients: BotClient[], channelId: string, guildId: strin
       });
       
       botClient.connection = connection;
-      console.log(`✓ ${botClient.name} joined the voice channel`);
+      console.log(`${botClient.name} joined the voice channel`);
       
       // Setup automatic reconnection
       await setupReconnection(botClient, channelId, guildId);
@@ -241,12 +241,7 @@ async function joinVC(botClients: BotClient[], channelId: string, guildId: strin
     }
   }
   
-  console.log('\n🔄 Auto-reconnect enabled! Accounts will automatically rejoin if disconnected.');
-  console.log('\n💡 Tips if accounts get kicked:');
-  console.log('   • Server may have anti-raid bots detecting mass joins');
-  console.log('   • Try joining accounts one at a time with longer delays');
-  console.log('   • Accounts may need to be "verified" in the server first');
-  console.log('   • Some servers kick accounts without profile pictures or activity');
+  console.log('\nAuto-reconnect enabled! Accounts will automatically rejoin if disconnected.');
 }
 
 async function disconnectAll(botClients: BotClient[]): Promise<void> {
@@ -260,7 +255,7 @@ async function disconnectAll(botClients: BotClient[]): Promise<void> {
       if (botClient.connection) {
         botClient.connection.destroy();
         botClient.connection = undefined;
-        console.log(`✓ ${botClient.name} disconnected`);
+        console.log(` ${botClient.name} disconnected`);
       }
     } catch (error) {
       console.error(`✗ ${botClient.name} failed to disconnect:`, error);
@@ -382,7 +377,7 @@ async function main() {
     process.exit(1);
   }
   
-  console.log(`\n✓ ${botClients.length} client(s) ready!`);
+  console.log(`\n${botClients.length} client(s) ready!`);
   
   // Start main loop
   await mainLoop(botClients);
