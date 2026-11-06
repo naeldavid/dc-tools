@@ -2,7 +2,7 @@
 
 > **!!! Disclaimer:** Selfbots and unofficial API usage are against Discord ToS. Use these tools at your own risk. I am not responsible for any bans or account actions.
 
-A comprehensive toolkit for Discord automation including quest auto-completion and badge management with clean CLI interfaces and browser scripts.
+A comprehensive toolkit for Discord automation including quest auto-completion, voice channel management, and badge management with clean CLI interfaces and browser scripts.
 
 ## Tools Included
 
@@ -10,7 +10,11 @@ A comprehensive toolkit for Discord automation including quest auto-completion a
 
 Automated bot for completing Discord Quests with live progress tracking and Orb-only filtering.
 
-### 2. Browser Scripts
+### 2. Voice Channel Bot Controller
+
+Multi-account voice channel controller for joining and managing multiple Discord accounts in voice channels simultaneously.
+
+### 3. Browser Scripts
 
 Ready-to-use browser console scripts for:
 
@@ -26,6 +30,15 @@ Ready-to-use browser console scripts for:
 - **Smart Quest Detection:** Supports both legacy and v2 Discord quest API formats
 - **Fast & Lightweight:** Built with TypeScript & modern Node.js
 
+## Voice Channel Bot Features
+
+- **Token Selection:** Choose which bot accounts to use from your .env file
+- **Server Selection:** Enter any Discord server ID
+- **Voice Channel Listing:** Automatically lists all voice channels in the server
+- **Multi-Account Control:** Join voice channels with multiple accounts simultaneously
+- **Clean Disconnect:** Easily disconnect all accounts with a single command
+- **Continuous Loop:** Quickly switch between servers and channels without restarting
+
 ## Installation & Setup
 
 > [!NOTE]
@@ -40,7 +53,7 @@ Ready-to-use browser console scripts for:
 
 ```bash
 git clone https://github.com/naeldavid/dc-tools.git
-cd dc-tools
+cd dc-tools/quest-tool
 ```
 
 ### 2. Install Dependencies
@@ -51,7 +64,7 @@ npm install
 
 ### 3. Setup Tokens
 
-Create a new file named `.env` in the bot folder, then add your Discord tokens:
+Create a new file named `.env` in the quest-tool folder, then add your Discord tokens:
 
 ```env
 TOKEN-1=YOUR_FIRST_DISCORD_TOKEN_HERE
@@ -70,7 +83,50 @@ npm start
 
 ---
 
-## How It Works
+## Voice Channel Bot: Installation & Usage
+
+### 1. Navigate to bot-vc folder
+
+```bash
+cd dc-tools/bot-vc
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Setup Tokens
+
+Create a new file named `.env` in the bot-vc folder, then add your Discord tokens:
+
+```env
+TOKEN1=YOUR_FIRST_DISCORD_TOKEN_HERE
+TOKEN2=YOUR_SECOND_DISCORD_TOKEN_HERE
+TOKEN3=YOUR_THIRD_DISCORD_TOKEN_HERE
+```
+
+> **Add as many tokens as you need!** Just follow the format `TOKENx=your_token_here`.
+
+### 4. Run Script
+
+```bash
+npm start
+```
+
+### 5. Usage Flow
+
+1. **Select Tokens:** Choose which tokens to use (individual or all)
+2. **Enter Server ID:** Input the Discord server ID
+3. **Select Voice Channel:** Choose from the list of available voice channels
+4. **Join:** All selected accounts will join the voice channel
+5. **Press Enter to Disconnect:** When ready, press Enter to disconnect all accounts
+6. **Loop:** Returns to step 2, or type "exit" to quit
+
+---
+
+## How Quest Bot Works
 
 1. **Automatically detects all tokens** in your `.env` file (any variable starting with `TOKEN-`)
 1. **Prompts you to select** which account to use from the available options
@@ -90,19 +146,23 @@ The `browser-scripts/` directory contains ready-to-use scripts that run directly
 ## Project Structure
 
 ```bash
-quest-tool/
-├── src/                    # Quest bot source code
-│   ├── client.ts          # Discord client wrapper
-│   ├── quest.ts           # Quest logic
-│   ├── questManager.ts    # Quest management
-│   ├── badge.ts           # Badge utilities
-│   └── interface.ts       # TypeScript interfaces
-├── browser-scripts/       # Browser console scripts
-│   ├── badge-scripts.md   # HypeSquad badge management
-│   └── get-token.md       # Token extraction guide
-├── bot.ts                 # Main bot entry point
-├── .env                   # Discord tokens (create this)
-└── package.json           # Project dependencies
+dc-tools/
+├── quest-tool/            # Quest auto-completion bot
+│   ├── src/              # Quest bot source code
+│   │   ├── client.ts     # Discord client wrapper
+│   │   ├── quest.ts      # Quest logic
+│   │   ├── questManager.ts # Quest management
+│   │   └── interface.ts  # TypeScript interfaces
+│   ├── bot.ts            # Main bot entry point
+│   ├── .env              # Discord tokens (create this)
+│   └── package.json      # Project dependencies
+├── bot-vc/               # Voice channel bot controller
+│   ├── bot.ts            # Main VC bot script
+│   ├── .env              # Discord tokens (create this)
+│   └── package.json      # Project dependencies
+└── browser-scripts/      # Browser console scripts
+    ├── badge-scripts.md  # HypeSquad badge management
+    └── get-token.md      # Token extraction guide
 ```
 
 ## 🙏 Credits

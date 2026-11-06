@@ -1,0 +1,24 @@
+{
+  "name": "bot-vc",
+  "version": "1.0.0",
+  "description": "Discord voice channel bot controller",
+  "main": "bot.js",
+  "scripts": {
+    "start": "ts-node bot.ts",
+    "build": "tsc"
+  },
+  "keywords": ["discord", "voice", "bot"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js-selfbot-v13": "^3.2.1",
+    "@discordjs/voice": "^0.16.1",
+    "dotenv": "^16.3.1",
+    "libsodium-wrappers": "^0.7.13"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2"
+  }
+}
