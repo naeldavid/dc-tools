@@ -6,51 +6,47 @@ A comprehensive toolkit for Discord automation including quest auto-completion, 
 
 ## Tools Included
 
-### 1. Quest Auto-Completion Bot
+### 1. quest-tool
 
 Automated bot for completing Discord Quests with live progress tracking and Orb-only filtering.
 
-### 2. Voice Channel Bot Controller
+### 2. bot-vc
 
 Multi-account voice channel controller for joining and managing multiple Discord accounts in voice channels simultaneously.
 
-### 3. Activity Spoofer (NEW!)
+### 3. activity-spoofer
 
 Terminal-based activity spoofer that simulates playing any game from Discord's detectable games list across multiple accounts.
 
-### 4. Browser Scripts
+### 4. browser-scripts
 
 Ready-to-use browser console scripts for:
 
 - **HypeSquad Badge Spoofing** - Add or remove HypeSquad house badges
-- **Token Extraction** - Safely get your Discord token
+- **Token Extraction** - Safely extract your Discord token
 
 ## Quest Bot Features
 
-- **Clean CLI Interface:** Uses organized tables and ASCII art
 - **Live Countdown:** Displays remaining quest time in real-time
 - **Orb-Only Filter:** Automatically filters and completes only quests that reward Orbs
-- **Multi-Account Support:** Easily switch between multiple Discord accounts
-- **Smart Quest Detection:** Supports both legacy and v2 Discord quest API formats
-- **Fast & Lightweight:** Built with TypeScript & modern Node.js
+- **Multi-Account Support:** Works on multiple Discord accounts simultaneously
+- **Quest Detection:** Supports both legacy and v2 Discord quest API formats
 
 ## Voice Channel Bot Features
 
 - **Token Selection:** Choose which bot accounts to use from your .env file
-- **Server Selection:** Enter any Discord server ID
+- **Server Selection:** Enter any Discord server ID or select from saved servers
 - **Voice Channel Listing:** Automatically lists all voice channels in the server
 - **Multi-Account Control:** Join voice channels with multiple accounts simultaneously
-- **Clean Disconnect:** Easily disconnect all accounts with a single command
+- **Auto-Reconnect:** Automatically reconnects if disconnected from voice channel
 - **Continuous Loop:** Quickly switch between servers and channels without restarting
 
 ## Activity Spoofer Features
 
-- **7000+ Games:** Access Discord's complete detectable games database
+- **All Supported Games:** Discord's complete detectable games database
 - **Multi-Account Support:** Control activity across multiple accounts simultaneously
-- **Favorites System:** Mark frequently used games for quick access
-- **Smart Search:** Quickly find games with fuzzy search
+- **Simple App ID Selection:** Browse games by ID from an auto-generated list file
 - **Auto-Caching:** Cache games list locally to reduce API calls (48-hour default)
-- **Interactive TUI:** Clean terminal interface with tables and pagination
 - **No Processes:** Works purely through Discord's Rich Presence API (no fake executables)
 
 ## Installation & Setup
@@ -61,7 +57,7 @@ Ready-to-use browser console scripts for:
 > - **[Node.js](https://nodejs.org/) 18.0.0 or newer**
 > - **[Git](https://git-scm.com/)**
 
-## Quest Bot: Installation & Usage
+## quest-tool: Installation & Usage
 
 ### 1. Clone Repository
 
@@ -87,7 +83,7 @@ TOKEN-MAIN=ANOTHER_TOKEN_HERE
 TOKEN-ALT=YET_ANOTHER_TOKEN_HERE
 ```
 
-> **Add as many accounts as you want!** Just follow the format `TOKEN-NAME=your_token_here`. The bot will automatically detect all tokens and let you choose which one to use.
+> **Add as many accounts as you want** Just follow the format `TOKEN-NAME=your_token_here`. The bot will automatically detect all tokens and let you choose which ones to use.
 
 ### 4. Run Script
 
@@ -97,7 +93,7 @@ npm start
 
 ---
 
-## Voice Channel Bot: Installation & Usage
+## bot-vc: Installation & Usage
 
 ### 1. Navigate to bot-vc folder
 
@@ -116,12 +112,12 @@ npm install
 Create a new file named `.env` in the bot-vc folder, then add your Discord tokens:
 
 ```env
-TOKEN1=YOUR_FIRST_DISCORD_TOKEN_HERE
-TOKEN2=YOUR_SECOND_DISCORD_TOKEN_HERE
-TOKEN3=YOUR_THIRD_DISCORD_TOKEN_HERE
+ACCOUNT-1=YOUR_FIRST_DISCORD_TOKEN_HERE
+ACCOUNT-2=YOUR_SECOND_DISCORD_TOKEN_HERE
+ACCOUNT-MAIN=YOUR_MAIN_TOKEN_HERE
 ```
 
-> **Add as many tokens as you need!** Just follow the format `TOKENx=your_token_here`.
+> **Add as many tokens as you want** Just follow the format `ACCOUNT-NAME=your_token_here`.
 
 ### 4. Run Script
 
@@ -140,7 +136,7 @@ npm start
 
 ---
 
-## Activity Spoofer: Installation & Usage
+## activity-spoofer: Installation & Usage
 
 ### 1. Navigate to activity-spoofer folder
 
@@ -178,43 +174,13 @@ npm start
 ### 5. Usage Flow
 
 1. **Select Accounts:** Choose which accounts to use (individual or all)
-2. **Main Menu:** View current status of all accounts
-3. **Set Activity:** Browse and select a game from 7000+ options
-4. **Game Browser:** Search, filter by favorites, paginate through games
+2. **Games List Opens:** A text file with all supported games opens automatically
+3. **Search Games:** Use Ctrl+F in the file to find games by name
+4. **Enter App ID:** Copy the App ID from the list and enter it
 5. **Activity Applied:** All selected accounts will show "Playing [Game]"
-6. **Clear Activity:** Remove the game status when done
-
-### Game Browser Commands
-
-- `[number]` - Select game by number
-- `s [term]` - Search games (e.g., `s minecraft`)
-- `f [number]` - Toggle favorite for quick access
-- `fav` - Show favorites only
-- `all` - Show all games
-- `n` / `p` - Next/Previous page
-- `r` - Refresh game list from Discord API
-- `b` - Back to main menu
+6. **Repeat:** Enter another App ID or type "exit" to quit
 
 ---
-
-## How Quest Bot Works
-
-1. **Automatically detects all tokens** in your `.env` file (any variable starting with `TOKEN-`)
-1. **Prompts you to select** which account to use from the available options
-1. **Fetches all available Discord quests** from the selected account
-1. **Filters quests** to only include those that reward Orbs (skips decorations, tokens, etc.)
-1. **Automatically enrolls** in filtered quests
-1. **Completes quest tasks** by spoofing video watch time or game activity
-1. **Live progress tracking** with real-time countdown timers
-
-## How Activity Spoofer Works
-
-1. **Fetches detectable games** from Discord's API (7000+ games including non-games)
-2. **Caches locally** to reduce API calls (configurable expiry, default 48 hours)
-3. **Sets Rich Presence** via discord.js-selfbot to set activity status
-4. **Discord displays** the game activity on your profile without needing the game installed
-5. **No fake processes** - works purely through Discord's presence API
-6. **Multi-account control** - manage activities across all your accounts simultaneously
 
 ## Browser Scripts
 
@@ -232,19 +198,21 @@ dc-tools/
 │   │   ├── client.ts     # Discord client wrapper
 │   │   ├── quest.ts      # Quest logic
 │   │   ├── questManager.ts # Quest management
-│   │   └── interface.ts  # TypeScript interfaces
+│   │   ├── interface.ts  # TypeScript interfaces
+│   │   └── constants.ts  # Configuration constants
 │   ├── bot.ts            # Main bot entry point
 │   ├── .env              # Discord tokens (create this)
-│   └── package.json      # Project dependencies
+│   ├── package.json      # Project dependencies
+│   └── quest.json        # Quest data file
 ├── bot-vc/               # Voice channel bot controller
 │   ├── bot.ts            # Main VC bot script
 │   ├── .env              # Discord tokens (create this)
 │   └── package.json      # Project dependencies
 ├── activity-spoofer/     # Activity/presence spoofer
-│   ├── bot.ts            # Main TUI script
+│   ├── bot.ts            # Main spoofer script
 │   ├── .env              # Discord tokens (create this)
 │   ├── games.cache.json  # Auto-generated games cache
-│   ├── favorites.json    # Auto-generated favorites list
+│   ├── games-list.txt    # Auto-generated searchable games list
 │   └── package.json      # Project dependencies
 └── browser-scripts/      # Browser console scripts
     ├── badge-scripts.md  # HypeSquad badge management
