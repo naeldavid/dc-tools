@@ -304,9 +304,6 @@ async function mainLoop(botClients: BotClient[]): Promise<void> {
         continue;
       }
       
-      // List voice channels
-      console.log('\n=== Voice Channels ===');
-      
       // Sort channels by extracting number from name
       const sortedChannels = voiceChannels.sort((a, b) => {
         const extractNumber = (name: string) => {
@@ -316,20 +313,40 @@ async function mainLoop(botClients: BotClient[]): Promise<void> {
         return extractNumber(a.name) - extractNumber(b.name);
       });
       
-      sortedChannels.forEach((channel, index) => {
-        console.log(`${index + 1}. ${channel.name}`);
+      // Create temp file with channel list
+      const fs = require('fs');
+      const { exec } = require('child_process');
+      const tempFilePath = './voice_channels_temp.txt';
+      let fileContent = '=== Available Voice Channels ===\n\n';
+      
+      sortedChannels.forEach((channel) => {
+        fileContent += `${channel.name} - ID: ${channel.id}\n`;
       });
       
-      // Select voice channel
-      const channelAnswer = await question('\nSelect voice channel number: ');
-      const channelIndex = parseInt(channelAnswer) - 1;
+      fs.writeFileSync(tempFilePath, fileContent, 'utf8');
       
-      if (channelIndex < 0 || channelIndex >= voiceChannels.length) {
-        console.log('Invalid selection.');
+      // Open the file automatically
+      console.log('\n📝 Opening voice channels list...');
+      const openCommand = process.platform === 'win32' 
+        ? `notepad ${tempFilePath}` 
+        : process.platform === 'darwin' 
+          ? `open ${tempFilePath}` 
+          : `xdg-open ${tempFilePath}`;
+      
+      exec(openCommand, (error: any) => {
+        if (error) {
+          console.log(`Note: Could not auto-open file. Please open: ${tempFilePath}`);
+        }
+      });
+      
+      // Ask for channel ID
+      const channelIdInput = await question('\nEnter Voice Channel ID (from the opened file): ');
+      const selectedChannel = sortedChannels.find((ch: any) => ch.id === channelIdInput);
+      
+      if (!selectedChannel) {
+        console.log('Invalid channel ID.');
         continue;
       }
-      
-      const selectedChannel = voiceChannels[channelIndex];
       
       // Join voice channel
       await joinVC(botClients, selectedChannel.id, guildId);

@@ -14,7 +14,11 @@ Automated bot for completing Discord Quests with live progress tracking and Orb-
 
 Multi-account voice channel controller for joining and managing multiple Discord accounts in voice channels simultaneously.
 
-### 3. Browser Scripts
+### 3. Activity Spoofer (NEW!)
+
+Terminal-based activity spoofer that simulates playing any game from Discord's detectable games list across multiple accounts.
+
+### 4. Browser Scripts
 
 Ready-to-use browser console scripts for:
 
@@ -38,6 +42,16 @@ Ready-to-use browser console scripts for:
 - **Multi-Account Control:** Join voice channels with multiple accounts simultaneously
 - **Clean Disconnect:** Easily disconnect all accounts with a single command
 - **Continuous Loop:** Quickly switch between servers and channels without restarting
+
+## Activity Spoofer Features
+
+- **7000+ Games:** Access Discord's complete detectable games database
+- **Multi-Account Support:** Control activity across multiple accounts simultaneously
+- **Favorites System:** Mark frequently used games for quick access
+- **Smart Search:** Quickly find games with fuzzy search
+- **Auto-Caching:** Cache games list locally to reduce API calls (48-hour default)
+- **Interactive TUI:** Clean terminal interface with tables and pagination
+- **No Processes:** Works purely through Discord's Rich Presence API (no fake executables)
 
 ## Installation & Setup
 
@@ -126,6 +140,63 @@ npm start
 
 ---
 
+## Activity Spoofer: Installation & Usage
+
+### 1. Navigate to activity-spoofer folder
+
+```bash
+cd dc-tools/activity-spoofer
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Setup Tokens
+
+Create a new file named `.env` in the activity-spoofer folder, then add your Discord tokens:
+
+```env
+ACCOUNT-1=YOUR_FIRST_DISCORD_TOKEN_HERE
+ACCOUNT-2=YOUR_SECOND_DISCORD_TOKEN_HERE
+ACCOUNT-MAIN=YOUR_MAIN_TOKEN_HERE
+
+# Optional: Cache expiry in hours (default: 48)
+CACHE_EXPIRY_HOURS=48
+```
+
+> **Add as many accounts as you want!** Just follow the format `ACCOUNT-NAME=your_token_here`.
+
+### 4. Run Script
+
+```bash
+npm start
+```
+
+### 5. Usage Flow
+
+1. **Select Accounts:** Choose which accounts to use (individual or all)
+2. **Main Menu:** View current status of all accounts
+3. **Set Activity:** Browse and select a game from 7000+ options
+4. **Game Browser:** Search, filter by favorites, paginate through games
+5. **Activity Applied:** All selected accounts will show "Playing [Game]"
+6. **Clear Activity:** Remove the game status when done
+
+### Game Browser Commands
+
+- `[number]` - Select game by number
+- `s [term]` - Search games (e.g., `s minecraft`)
+- `f [number]` - Toggle favorite for quick access
+- `fav` - Show favorites only
+- `all` - Show all games
+- `n` / `p` - Next/Previous page
+- `r` - Refresh game list from Discord API
+- `b` - Back to main menu
+
+---
+
 ## How Quest Bot Works
 
 1. **Automatically detects all tokens** in your `.env` file (any variable starting with `TOKEN-`)
@@ -135,6 +206,15 @@ npm start
 1. **Automatically enrolls** in filtered quests
 1. **Completes quest tasks** by spoofing video watch time or game activity
 1. **Live progress tracking** with real-time countdown timers
+
+## How Activity Spoofer Works
+
+1. **Fetches detectable games** from Discord's API (7000+ games including non-games)
+2. **Caches locally** to reduce API calls (configurable expiry, default 48 hours)
+3. **Sets Rich Presence** via discord.js-selfbot to set activity status
+4. **Discord displays** the game activity on your profile without needing the game installed
+5. **No fake processes** - works purely through Discord's presence API
+6. **Multi-account control** - manage activities across all your accounts simultaneously
 
 ## Browser Scripts
 
@@ -159,6 +239,12 @@ dc-tools/
 ├── bot-vc/               # Voice channel bot controller
 │   ├── bot.ts            # Main VC bot script
 │   ├── .env              # Discord tokens (create this)
+│   └── package.json      # Project dependencies
+├── activity-spoofer/     # Activity/presence spoofer
+│   ├── bot.ts            # Main TUI script
+│   ├── .env              # Discord tokens (create this)
+│   ├── games.cache.json  # Auto-generated games cache
+│   ├── favorites.json    # Auto-generated favorites list
 │   └── package.json      # Project dependencies
 └── browser-scripts/      # Browser console scripts
     ├── badge-scripts.md  # HypeSquad badge management
