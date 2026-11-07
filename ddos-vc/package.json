@@ -1,0 +1,35 @@
+{
+  "name": "ddos-vc",
+  "version": "1.0.0",
+  "description": "Discord voice channel API DDoS tool - spams requests to overload VC channels",
+  "main": "attack.js",
+  "scripts": {
+    "start": "ts-node attack.ts",
+    "build": "tsc",
+    "test": "ts-node test-attack.ts",
+    "check": "ts-node quick-test.ts"
+  },
+  "keywords": [
+    "discord",
+    "ddos",
+    "attack",
+    "vc",
+    "voice"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.3",
+    "dotenv": "^16.3.1",
+    "figlet": "^1.7.0",
+    "undici": "^6.4.0"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.12.0",
+    "@types/node": "^20.19.43",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
