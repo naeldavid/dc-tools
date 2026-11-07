@@ -4,9 +4,12 @@
   "description": "Discord voice channel API DDoS tool - spams requests to overload VC channels",
   "main": "attack.js",
   "scripts": {
-    "start": "node_modules/.bin/ts-node attack.ts",
-    "build": "node_modules/.bin/tsc",
-    "test": "node_modules/.bin/ts-node test-attack.ts"
+    "start": "npx ts-node attack.ts",
+    "build": "npx tsc",
+    "test": "npx ts-node test-attack.ts"
+  },
+  "config": {
+    "script-shell": "/bin/bash"
   },
   "keywords": ["discord", "ddos", "attack", "vc", "voice"],
   "author": "",
